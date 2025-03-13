@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class ProfileController extends Controller
 {
@@ -59,5 +61,18 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+    /**
+     * Show Roles & Permissions
+     */
+    public function showRolesPermissions() {
+        $user = Auth::user();
+        $userRoles = $user->getRoleNames();
+        $permissions = $user->getPermissionNames();
+        return Inertia::render('settings/roles-permissions', [
+            'userRoles' => $userRoles,
+            'userPermissions' => $permissions
+        ]);
     }
 }
