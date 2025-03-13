@@ -23,6 +23,7 @@ class RolesPermissionsSeeder extends Seeder
         Permission::create(['name' => 'edit users']);
         Permission::create(['name' => 'delete users']);
         Permission::create(['name' => 'publish users']);
+        Permission::create(['name' => 'view settings']);
 
         // update cache to know about the newly created permissions (required if using WithoutModelEvents in seeders)
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
