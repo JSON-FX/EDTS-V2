@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\Department;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class RegisteredUserController extends Controller
 {
@@ -20,7 +23,10 @@ class RegisteredUserController extends Controller
      */
     public function create(): Response
     {
-        return Inertia::render('auth/register');
+        $departments = Department::all(); 
+        return Inertia::render('auth/register', [
+            'departments' => $departments,
+        ]);
     }
 
     /**
@@ -33,13 +39,21 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            'department_id' => 'required|exists:departments,id',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'department_id' => $request->department_id,
             'password' => Hash::make($request->password),
+        ]);
+
+        $user->assignRole('viewer');
+        $user->givePermissionTo([
+            'view settings',
+            'view users',
         ]);
 
         event(new Registered($user));

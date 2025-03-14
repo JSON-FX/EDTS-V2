@@ -19,6 +19,7 @@ class UserWithRolesSeeder extends Seeder
         $user = User::factory()->create([
             'name' => 'Jayson Alanano',
             'email' => 'json.alanano@gmail.com',
+            'department_id' => 2,
             'password' => Hash::make('ih3k41995'),
         ]);
 
