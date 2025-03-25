@@ -1,10 +1,12 @@
 import { Head, useForm } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
+import { DropdownMenu } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
@@ -12,6 +14,7 @@ import AuthLayout from '@/layouts/auth-layout';
 type RegisterForm = {
     name: string;
     email: string;
+    department_id: number;
     password: string;
     password_confirmation: string;
 };
@@ -20,9 +23,12 @@ export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm<Required<RegisterForm>>({
         name: '',
         email: '',
+        department_id: '',
         password: '',
         password_confirmation: '',
     });
+
+    const { departments }: any = usePage().props;
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
@@ -70,12 +76,30 @@ export default function Register() {
                     </div>
 
                     <div className="grid gap-2">
+                        <Label htmlFor="department">Department</Label>
+                        <select
+                            id="department_id"
+                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
+                            value={data.department_id}
+                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setData('department_id', Number(e.target.value))}
+                            disabled={processing}>
+                            <option value="">Select department</option>
+                            {departments.map((department: any) => (
+                                <option value={department.id}>
+                                    {department.name}
+                                </option>
+                            ))}
+                        </select>
+                        <InputError message={errors.department_id} />
+                    </div>
+
+                    <div className="grid gap-2">
                         <Label htmlFor="password">Password</Label>
                         <Input
                             id="password"
                             type="password"
                             required
-                            tabIndex={3}
+                            tabIndex={4}
                             autoComplete="new-password"
                             value={data.password}
                             onChange={(e) => setData('password', e.target.value)}
@@ -91,7 +115,7 @@ export default function Register() {
                             id="password_confirmation"
                             type="password"
                             required
-                            tabIndex={4}
+                            tabIndex={5}
                             autoComplete="new-password"
                             value={data.password_confirmation}
                             onChange={(e) => setData('password_confirmation', e.target.value)}
