@@ -22,7 +22,7 @@ class UserWithRolesSeeder extends Seeder
             'password' => Hash::make('ih3k41995'),
         ]);
 
-        $user->assignRole('super-admin');
+        $user->assignRole('endorser');
         $user->syncPermissions(Permission::all());
     }
 }
