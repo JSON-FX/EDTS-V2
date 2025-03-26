@@ -19,6 +19,7 @@ export interface NavItem {
     title: string;
     href: string;
     icon?: LucideIcon | null;
+    permission?: string;
     isActive?: boolean;
 }
 
@@ -27,6 +28,7 @@ export interface SharedData {
     quote: { message: string; author: string };
     auth: Auth;
     ziggy: Config & { location: string };
+    permissions: string[];
     [key: string]: unknown;
 }
 

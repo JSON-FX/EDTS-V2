@@ -18,6 +18,7 @@ class RolesPermissionsSeeder extends Seeder
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         // create permissions
+        Permission::create(['name' => 'manage.users']);
         Permission::create(['name' => 'create users']);
         Permission::create(['name' => 'view users']);
         Permission::create(['name' => 'edit users']);
